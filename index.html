@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nikita Workshop</title>
+<meta name="description" content="Nikita Workshop LLC — photo, video editing, drone, DJ and event video, computer help, AI, marketing and social media.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="Nikita Workshop">
+<meta property="og:description" content="Photo, video, drone, computer help, AI, marketing and social media.">
+<meta property="og:image" content="assets/og-1200x630.jpg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preload" as="image" href="assets/closed.webp" type="image/webp">
+<style>
+:root{
+  --cream:#f7ecd9; --cream-2:#efdcbd; --wood:#c58a4e; --wood-dark:#7a4a24; --ink:#43280f;
+  --glow:#ffc15a; --glow-soft:rgba(255,193,90,.28);
+  --S:min(88vw,76vh,760px);
+  --font:ui-rounded,"SF Pro Rounded","Nunito","Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+}
+@supports (height:100dvh){:root{--S:min(88vw,76dvh,760px)}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#fff;color:var(--ink);font-family:var(--font);
+  -webkit-tap-highlight-color:transparent;overflow:hidden;overscroll-behavior:none}
+img{display:block;max-width:none;-webkit-user-drag:none;user-select:none}
+a,button{touch-action:manipulation}
+[hidden]{display:none!important}
+
+/* ---------- ROOM (sits under the intro) ---------- */
+#room{position:fixed;inset:0;background:#c98e57;z-index:1}
+.scroll{position:absolute;inset:0;overflow:hidden;
+  background:linear-gradient(#d58c55 0 50%,#be6f3c 50% 100%)}
+.scene{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:max(100vw,177.7778vh);aspect-ratio:16/9}
+@supports (height:100dvh){.scene{width:max(100vw,177.7778dvh)}}
+.scene-img{width:100%;height:100%;object-fit:fill}
+.brand{position:absolute;z-index:3;top:max(14px,env(safe-area-inset-top));left:18px;font-weight:700;letter-spacing:.04em;
+  font-size:13px;color:#fff7ea;text-shadow:0 1px 6px rgba(70,35,8,.55);pointer-events:none}
+.hint{position:absolute;z-index:3;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;margin:0;
+  font-size:13px;color:#fff7ea;text-shadow:0 1px 6px rgba(70,35,8,.65);pointer-events:none;
+  transition:opacity .8s ease .2s}
+.hint .t{display:none}
+.hint .m{display:inline}
+@media (hover:hover) and (pointer:fine){.hint .t{display:inline}.hint .m{display:none}}
+#room.interacted .hint{opacity:0}
+
+/* Hotspots are positioned in image units (1024x576) as % of the scene box, so they track the image at every size */
+.hs{position:absolute;display:block;color:inherit;text-decoration:none;
+  left:calc(var(--cx)*100%/1024);top:calc(var(--cy)*100%/576);
+  width:calc(var(--w)*100%/1024);height:calc(var(--h)*100%/576);
+  min-width:48px;min-height:48px;transform:translate(-50%,-50%);border-radius:14px;outline:none;cursor:pointer}
+.hs .ring{position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  border:2px solid transparent;background:transparent;transition:background .22s,border-color .22s,box-shadow .22s}
+.hs .dot{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;
+  background:var(--glow);box-shadow:0 0 0 0 rgba(255,193,90,.7);opacity:0;pointer-events:none}
+.hs .tag{position:absolute;left:50%;bottom:calc(100% + 8px);transform:translate(-50%,6px);white-space:nowrap;
+  background:var(--cream);color:var(--ink);font-size:14px;font-weight:700;padding:7px 12px;border-radius:999px;
+  box-shadow:0 6px 18px rgba(60,30,6,.35);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:2}
+.hs.tag-below .tag{bottom:auto;top:calc(100% + 8px)}
+/* Hover styling only for real hover devices: touch gets a direct, single-tap open (no hover-preview step) */
+@media (hover:hover) and (pointer:fine){
+  .hs:hover .ring{background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
+  .hs:hover .tag{opacity:1;transform:translate(-50%,0)}
+}
+.hs:focus-visible .ring{background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
+.hs:focus-visible .tag{opacity:1;transform:translate(-50%,0)}
+@media (hover:none){
+  #room.ready .hs .dot{opacity:.95;animation:pulse 2.2s ease-out infinite}
+  #room.interacted .hs .dot{opacity:0;animation:none}
+  .hs:active .ring{background:var(--glow-soft);border-color:rgba(255,214,140,.95)}
+}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,193,90,.75)}70%{box-shadow:0 0 0 16px rgba(255,193,90,0)}100%{box-shadow:0 0 0 0 rgba(255,193,90,0)}}
+
+/* Portrait phones: the wide room is a horizontally swipeable strip, centred, with the wall colours filling above/below */
+@media (orientation:portrait){
+  .scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .scroll::-webkit-scrollbar{display:none}
+  .scene{position:relative;left:auto;top:auto;transform:none;flex:none;
+    height:72vh;width:calc(72vh*16/9);margin-top:calc((100vh - 72vh)/2);
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 5%,#000 95%,transparent 100%);
+            mask-image:linear-gradient(to bottom,transparent 0,#000 5%,#000 95%,transparent 100%)}
+  @supports (height:100dvh){.scene{height:72dvh;width:calc(72dvh*16/9);margin-top:calc((100dvh - 72dvh)/2)}}
+}
+
+/* ---------- INTRO ---------- */
+#intro{position:fixed;inset:0;z-index:5;background:#fff;overflow:hidden}
+.house{position:absolute;left:50%;top:50%;width:var(--S);height:var(--S);margin:calc(var(--S)/-2) 0 0 calc(var(--S)/-2);
+  padding:0;border:0;background:none;cursor:pointer;display:block;will-change:transform;outline:none;border-radius:6%}
+.house:focus-visible{outline:3px solid var(--wood);outline-offset:4px}
+.house img,.house picture,.house .swing{position:absolute;inset:0;width:100%;height:100%}
+.house .swing{display:none;perspective:calc(var(--S)*2.6);perspective-origin:50% 60%}
+.house.opening .swing{display:block}
+.house.opening picture{visibility:hidden}
+.spill{position:absolute;left:28%;top:80.5%;width:48%;height:11%;opacity:0;mix-blend-mode:multiply;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(255,176,70,.40),rgba(255,196,110,.16) 55%,rgba(255,210,150,0))}
+.door{position:absolute;left:34.668%;top:41.211%;width:32.031%;height:40.332%;transform-origin:0 50%;transform-style:preserve-3d;will-change:transform}
+.door img{position:absolute;inset:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.door .back{transform:rotateY(180deg)}
+.door .shade{position:absolute;inset:0;background:#3a1d06;opacity:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+@media (hover:hover) and (pointer:fine){
+  .house:not(.opening):hover picture{filter:brightness(1.03) saturate(1.05)}
+}
+.call{position:absolute;left:0;right:0;bottom:max(26px,env(safe-area-inset-bottom));text-align:center;font-size:13px;letter-spacing:.14em;
+  text-transform:uppercase;color:#a47a4e;opacity:0;pointer-events:none}
+#intro.ready .call{animation:callin .9s ease .5s forwards}
+@keyframes callin{to{opacity:.85}}
+.skip{position:absolute;z-index:6;top:max(12px,env(safe-area-inset-top));right:14px;border:0;background:none;color:#a47a4e;font:600 12px var(--font);
+  letter-spacing:.08em;text-transform:uppercase;padding:12px 10px;min-height:44px;opacity:.65;cursor:pointer}
+.skip:hover,.skip:focus-visible{opacity:1;text-decoration:underline}
+#intro.busy .call,#intro.busy .skip{animation:none;transition:opacity .25s;opacity:0}
+#intro.busy .skip{pointer-events:none}
+
+/* ---------- SECTION PANELS ---------- */
+#panels{position:fixed;inset:0;z-index:8;pointer-events:none}
+.panel{position:absolute;inset:0;overflow:auto;background:
+   radial-gradient(1200px 600px at 50% -10%,#fff6e6,transparent 70%),var(--cream);
+   opacity:0;transform:translateY(14px);transition:opacity .35s ease,transform .35s ease;pointer-events:none;visibility:hidden}
+.panel.show{opacity:1;transform:none;pointer-events:auto;visibility:visible}
+.panel-in{max-width:640px;margin:0 auto;padding:max(22px,env(safe-area-inset-top)) 24px 56px}
+.back-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--wood-dark);font-weight:700;text-decoration:none;font-size:15px;
+  padding:0 14px 0 6px;margin-left:-6px;border-radius:999px}
+.back-link:hover,.back-link:focus-visible{background:rgba(197,138,78,.16);outline:none}
+.art{width:min(220px,58%);aspect-ratio:var(--ar);margin:18px 0 6px;border-radius:22px;background-image:url(assets/room.webp);background-repeat:no-repeat;
+  background-size:var(--bs);background-position:var(--bp);box-shadow:0 12px 30px rgba(90,50,12,.25),inset 0 0 0 3px rgba(255,236,200,.55)}
+.panel h1{font-size:clamp(30px,8vw,44px);line-height:1.08;margin:18px 0 10px;letter-spacing:-.01em;outline:none}
+.panel p.lead{font-size:clamp(17px,4.6vw,20px);line-height:1.45;margin:0 0 18px;color:#5b3a1c}
+.note{display:inline-block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--wood-dark);background:var(--cream-2);
+  border-radius:999px;padding:6px 12px;margin:0 0 26px}
+.contact-links{display:flex;flex-direction:column;gap:10px;margin:0 0 26px}
+.contact-links a{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;border-radius:14px;background:var(--wood-dark);color:#fff7ea;text-decoration:none;font-weight:700;width:fit-content;max-width:100%}
+.more{border-top:1px solid rgba(122,74,36,.22);padding-top:18px;margin-top:8px}
+.more h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 12px;color:var(--wood-dark)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips a{display:inline-flex;align-items:center;min-height:44px;padding:0 15px;border-radius:999px;background:#fff8ec;border:1px solid rgba(122,74,36,.25);
+  color:var(--ink);text-decoration:none;font-size:14px;font-weight:600}
+.chips a:hover,.chips a:focus-visible{background:var(--glow-soft);border-color:var(--wood);outline:none}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  .panel{transition:opacity .2s;transform:none}
+  .hs .dot{animation:none!important}
+  .hs .tag,.hs .ring{transition:none}
+}
+noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;place-items:center;text-align:center;padding:24px;font-family:var(--font)}
+</style>
+</head>
+<body>
+
+<!-- ROOM -->
+<main id="room" inert aria-label="Inside the workshop">
+  <span class="brand" aria-hidden="true">NIKITA WORKSHOP</span>
+  <div class="scroll" id="scroller">
+    <div class="scene" id="scene">
+      <img class="scene-img" id="roomImg" src="assets/room.webp" width="1280" height="720"
+           alt="Inside the Nikita Workshop: a wooden room with a camera on a tripod, a desk with a lamp and a video-editing monitor, a pegboard with a drone controller and headphones, a pencil, a drone on a shelf and a wood stove.">
+      <!-- cx, cy, w, h are in image units on a 1024x576 grid -->
+      <a class="hs" href="#/marketing" data-sec="marketing" style="--cx:207;--cy:228;--w:44;--h:140"><span class="ring"></span><span class="dot"></span><span class="tag">Marketing &amp; social media</span></a>
+      <a class="hs" href="#/photo"     data-sec="photo"     style="--cx:215;--cy:416;--w:140;--h:250"><span class="ring"></span><span class="dot"></span><span class="tag">Photo</span></a>
+      <a class="hs" href="#/computer"  data-sec="computer"  style="--cx:298;--cy:227;--w:90;--h:90"><span class="ring"></span><span class="dot"></span><span class="tag">Computer help</span></a>
+      <a class="hs" href="#/dj"        data-sec="dj"        style="--cx:387;--cy:236;--w:76;--h:112"><span class="ring"></span><span class="dot"></span><span class="tag">DJ &amp; event videos</span></a>
+      <a class="hs" href="#/ai"        data-sec="ai"        style="--cx:376;--cy:342;--w:92;--h:112"><span class="ring"></span><span class="dot"></span><span class="tag">AI help</span></a>
+      <a class="hs" href="#/video"     data-sec="video"     style="--cx:501;--cy:337;--w:152;--h:134"><span class="ring"></span><span class="dot"></span><span class="tag">Video editing</span></a>
+      <a class="hs" href="#/drone"     data-sec="drone"     style="--cx:722;--cy:331;--w:208;--h:68"><span class="ring"></span><span class="dot"></span><span class="tag">Drone</span></a>
+      <a class="hs tag-below" href="#/contact" data-sec="contact" style="--cx:852;--cy:462;--w:174;--h:158"><span class="ring"></span><span class="dot"></span><span class="tag">Contact</span></a>
+    </div>
+  </div>
+  <p class="hint"><span class="t">Hover over anything in the room — it’s all clickable</span><span class="m">Swipe to look around · tap anything</span></p>
+</main>
+
+<!-- INTRO -->
+<div id="intro">
+  <button class="skip" id="skip" type="button">Skip</button>
+  <button class="house" id="house" type="button" aria-label="Open the workshop door">
+    <picture class="closed-pic">
+      <source srcset="assets/closed.webp" type="image/webp">
+      <img class="closed" id="closedImg" src="assets/original/closed.png" width="1024" height="1024" alt="Nikita Workshop logo: a small wooden workshop with a closed barn door and a lit window">
+    </picture>
+    <div class="swing" aria-hidden="true">
+      <img class="nodoor" src="assets/house-nodoor.webp" alt="" width="1024" height="1024">
+      <div class="spill" id="spill"></div>
+      <div class="door" id="door">
+        <img class="front" src="assets/door-front.webp" alt="" width="328" height="413">
+        <div class="shade" id="shade"></div>
+        <img class="back" src="assets/door-back.webp" alt="" width="328" height="413">
+      </div>
+    </div>
+  </button>
+  <div class="call" aria-hidden="true">Tap the door</div>
+</div>
+
+<!-- SECTIONS (placeholder pages) -->
+<div id="panels"></div>
+
+<noscript><div class="ns"><div><h1>Nikita Workshop</h1><p>This page needs JavaScript. Email <a href="mailto:hello@nikitaworkshop.com">hello@nikitaworkshop.com</a>.</p></div></div></noscript>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- section content (placeholder copy; Nikita can edit freely) ---- */
+  // art = crop box of the room image in 1024x576 units: [x, y, w, h]
+  const SECTIONS = {
+    photo:     { title: 'Photo',                    line: 'Photography for people, places and events.',      art: [148, 288, 136, 256] },
+    video:     { title: 'Video editing',            line: 'Footage in, finished video out.',                 art: [424, 268, 156, 138] },
+    drone:     { title: 'Drone',                    line: 'Aerial photo and video.',                         art: [616, 296, 214, 72] },
+    dj:        { title: 'DJ & event videos',        line: 'Music and moments, captured on video.',           art: [346, 176, 82, 120] },
+    computer:  { title: 'Computer help',            line: 'Friendly help with the computer stuff.',          art: [252, 178, 96, 96] },
+    ai:        { title: 'AI help',                  line: 'Putting AI to work on real, everyday tasks.',     art: [326, 288, 92, 118] },
+    marketing: { title: 'Marketing & social media', line: 'Social media and marketing that fits your business.', art: [186, 156, 56, 150] },
+    contact:   { title: 'Contact',                  line: 'Say hello.',                                      art: [764, 386, 178, 158], contact: true },
+  };
+  const ORDER = ['photo','video','drone','dj','computer','ai','marketing','contact'];
+  const esc = s => s.replace(/&/g, '&amp;');
+
+  const panels = $('#panels');
+  for (const id of ORDER) {
+    const s = SECTIONS[id], [x, y, w, h] = s.art;
+    const bs = (1024 / w * 100).toFixed(2) + '% auto';
+    const bp = (x / (1024 - w) * 100).toFixed(2) + '% ' + (y / (576 - h) * 100).toFixed(2) + '%';
+    const el = document.createElement('section');
+    el.className = 'panel'; el.id = 'sec-' + id; el.setAttribute('aria-labelledby', 'h-' + id);
+    el.innerHTML = `<div class="panel-in">
+      <a class="back-link" href="#/room"><span aria-hidden="true">←</span> Back to the workshop</a>
+      <div class="art" role="img" aria-label="${esc(s.title)} — from the workshop" style="--ar:${w}/${h};--bs:${bs};--bp:${bp}"></div>
+      <h1 id="h-${id}" tabindex="-1">${esc(s.title)}</h1>
+      <p class="lead">${esc(s.line)}</p>
+      ${s.contact
+        ? `<div class="contact-links"><a href="mailto:hello@nikitaworkshop.com">hello@nikitaworkshop.com</a><a href="https://instagram.com/nikitaworkshop" rel="noopener">@nikitaworkshop on Instagram</a></div>`
+        : `<span class="note">Placeholder — details coming soon</span>`}
+      <nav class="more" aria-label="More from the workshop"><h2>More from the workshop</h2><div class="chips">
+        ${ORDER.filter(o => o !== id).map(o => `<a href="#/${o}">${esc(SECTIONS[o].title)}</a>`).join('')}
+      </div></nav></div>`;
+    panels.appendChild(el);
+  }
+
+  const room = $('#room'), intro = $('#intro'), scroller = $("#scroller");
+  let introDone = false, opened = false, timer = 0, current = null, lastHs = null;
+
+  /* ---- router: #/photo opens a section, anything else = room ---- */
+  function route() {
+    const id = (location.hash.match(/^#\/([a-z]+)$/) || [])[1];
+    const next = SECTIONS[id] ? id : null;
+    if (next && !introDone) finishIntro();
+    if (next === current) return;
+    if (current) $('#sec-' + current).classList.remove('show');
+    current = next;
+    if (next) {
+      const p = $('#sec-' + next);
+      p.scrollTop = 0; p.classList.add('show');
+      room.inert = true; room.classList.add('interacted');
+      requestAnimationFrame(() => $('#h-' + next).focus({ preventScroll: true }));
+    } else if (introDone) {
+      room.inert = false;
+      if (lastHs) lastHs.focus({ preventScroll: true });
+    }
+  }
+  addEventListener('hashchange', route);
+  addEventListener('keydown', e => { if (e.key === 'Escape' && current) location.hash = '#/room'; });
+  room.addEventListener('click', e => { const a = e.target.closest('.hs'); if (a) lastHs = a; });
+  room.addEventListener('pointerdown', () => room.classList.add('interacted'), { once: true });
+  scroller.addEventListener('touchmove', () => room.classList.add('interacted'), { once: true, passive: true });
+
+  /* ---- room framing (portrait: start the swipeable strip centred) ---- */
+  function centreScroll() { scroller.scrollLeft = matchMedia('(orientation:portrait)').matches ? (scroller.scrollWidth - scroller.clientWidth) / 2 : 0; }
+  addEventListener('resize', () => { if (introDone && matchMedia('(orientation:portrait)').matches && !room.classList.contains('interacted')) centreScroll(); });
+
+  /* ---- intro ---- */
+  const house = $('#house'), door = $('#door'), shade = $('#shade');
+  const layerSrcs = ['assets/closed.webp','assets/house-nodoor.webp','assets/door-front.webp','assets/door-back.webp','assets/room.webp'];
+  const preload = Promise.all(layerSrcs.map(src => new Promise(res => {
+    const i = new Image(); i.onload = i.onerror = () => res(); i.src = src;
+  })));
+  const windowLoaded = new Promise(res => document.readyState === 'complete' ? res() : addEventListener('load', res, { once: true }));
+
+  function finishIntro() {
+    if (introDone) return;
+    introDone = true; clearTimeout(timer);
+    intro.hidden = true; intro.setAttribute('aria-hidden', 'true');
+    room.classList.add('ready');
+    if (!current) room.inert = false;
+    centreScroll();
+  }
+
+  async function openDoor(skip) {
+    if (opened) return; opened = true; clearTimeout(timer);
+    intro.classList.add('busy');
+    if (skip) { finishIntro(); return; }
+    await preload;
+    centreScroll();
+    const vw = innerWidth, vh = innerHeight;
+    const hb = house.getBoundingClientRect(), S = hb.width, k = S / 1024;
+    const dc = { x: 519 * k, y: 628.5 * k };                      // doorway centre inside the house box
+    const sc = Math.max(vw / (328 * k), vh / (413 * k)) * 1.06;    // scale at which the doorway fills the screen
+    const dx = vw / 2 - (hb.left + dc.x), dy = vh / 2 - (hb.top + dc.y);
+    house.style.transformOrigin = `${dc.x}px ${dc.y}px`;
+
+    if (reduce) {                                                  // simple fade, no swing / zoom
+      room.classList.add('ready');
+      await intro.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, easing: 'ease', fill: 'forwards' }).finished;
+      finishIntro(); return;
+    }
+
+    house.classList.add('opening');
+    // 1) swing the door (front face -> back face) around its left hinge
+    const swing = door.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(-118deg)' }],
+      { duration: 950, easing: 'cubic-bezier(.32,.05,.25,1)', fill: 'forwards' });
+    $('#spill').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 950, easing: 'ease-out', fill: 'forwards' });
+    shade.animate([{ opacity: 0 }, { opacity: .35, offset: .5 }, { opacity: 0 }], { duration: 950, fill: 'forwards' });
+    await swing.finished;
+    await new Promise(r => setTimeout(r, 300));               // a beat with the door open
+
+    // 2) camera push through the doorway; the room is already underneath and the intro fades out over the last part
+    const D = 1300;
+    // the last part is a "rack focus": the zoomed doorway softens and dissolves into the sharp room
+    house.animate([{ transform: 'translate(0,0) scale(1)', filter: 'blur(0px)' },
+                   { transform: `translate(${dx * .72}px,${dy * .72}px) scale(${sc * .55})`, filter: 'blur(0px)', offset: .6 },
+                   { transform: `translate(${dx}px,${dy}px) scale(${sc})`, filter: 'blur(10px)' }],
+      { duration: D, easing: 'cubic-bezier(.55,0,.3,1)', fill: 'forwards' });
+    $('#scene').animate([{ scale: '1.12', filter: 'blur(10px)' }, { scale: '1.07', filter: 'blur(10px)', offset: .55 }, { scale: '1', filter: 'blur(0px)' }],
+      { duration: D, easing: 'cubic-bezier(.25,.6,.25,1)' });
+    const fade = intro.animate([{ opacity: 1 }, { opacity: 1, offset: .6 }, { opacity: 0 }], { duration: D, easing: 'ease-in-out', fill: 'forwards' });
+    await fade.finished;
+    finishIntro();
+  }
+
+  house.addEventListener('click', () => openDoor(false));
+  $('#skip').addEventListener('click', () => openDoor(true));
+
+  // auto-open ~2s after everything has loaded, or sooner on a tap/click
+  Promise.all([windowLoaded, preload]).then(() => {
+    if (introDone || opened) return;
+    intro.classList.add('ready');
+    timer = setTimeout(() => openDoor(false), 2000);
+  });
+
+  route();   // a deep link such as #/photo skips the intro
+})();
+</script>
+</body>
+</html>
