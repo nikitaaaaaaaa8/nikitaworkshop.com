@@ -8,9 +8,9 @@
 <meta name="theme-color" content="#ffffff">
 <meta property="og:title" content="Nikita Workshop">
 <meta property="og:description" content="Photo, video, drone, computer help, AI, marketing and social media.">
-<meta property="og:image" content="assets/og-1200x630.jpg">
+<meta property="og:image" content="https://nikitaaaaaaaa8.github.io/nikitaworkshop.com/assets/og-1200x630.jpg">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="preload" as="image" href="assets/closed.webp" type="image/webp">
+<link rel="preload" as="image" href="assets/video/poster-closed.webp" type="image/webp">
 <style>
 :root{
   --cream:#f7ecd9; --cream-2:#efdcbd; --wood:#c58a4e; --wood-dark:#7a4a24; --ink:#43280f;
@@ -33,6 +33,7 @@ a,button{touch-action:manipulation}
 .scene{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   width:max(100vw,177.7778vh);aspect-ratio:16/9}
 @supports (height:100dvh){.scene{width:max(100vw,177.7778dvh)}}
+.scene>picture{display:block;width:100%;height:100%}
 .scene-img{width:100%;height:100%;object-fit:fill}
 .brand{position:absolute;z-index:3;top:max(14px,env(safe-area-inset-top));left:18px;font-weight:700;letter-spacing:.04em;
   font-size:13px;color:#fff7ea;text-shadow:0 1px 6px rgba(70,35,8,.55);pointer-events:none}
@@ -82,33 +83,31 @@ a,button{touch-action:manipulation}
   @supports (height:100dvh){.scene{height:72dvh;width:calc(72dvh*16/9);margin-top:calc((100dvh - 72dvh)/2)}}
 }
 
-/* ---------- INTRO ---------- */
-#intro{position:fixed;inset:0;z-index:5;background:#fff;overflow:hidden}
+/* ---------- INTRO (video clips) ---------- */
+#intro{position:fixed;inset:0;z-index:5;overflow:hidden}
+#wbg{position:absolute;inset:0;background:#fff}
 .house{position:absolute;left:50%;top:50%;width:var(--S);height:var(--S);margin:calc(var(--S)/-2) 0 0 calc(var(--S)/-2);
-  padding:0;border:0;background:none;cursor:pointer;display:block;will-change:transform;outline:none;border-radius:6%}
+  padding:0;border:0;background:none;cursor:pointer;display:block;outline:none;border-radius:6%;overflow:hidden}
 .house:focus-visible{outline:3px solid var(--wood);outline-offset:4px}
-.house img,.house picture,.house .swing{position:absolute;inset:0;width:100%;height:100%}
-.house .swing{display:none;perspective:calc(var(--S)*2.6);perspective-origin:50% 60%}
-.house.opening .swing{display:block}
-.house.opening picture{visibility:hidden}
-.spill{position:absolute;left:28%;top:80.5%;width:48%;height:11%;opacity:0;mix-blend-mode:multiply;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(255,176,70,.40),rgba(255,196,110,.16) 55%,rgba(255,210,150,0))}
-.door{position:absolute;left:34.668%;top:41.211%;width:32.031%;height:40.332%;transform-origin:0 50%;transform-style:preserve-3d;will-change:transform}
-.door img{position:absolute;inset:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.door .back{transform:rotateY(180deg)}
-.door .shade{position:absolute;inset:0;background:#3a1d06;opacity:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-@media (hover:hover) and (pointer:fine){
-  .house:not(.opening):hover picture{filter:brightness(1.03) saturate(1.05)}
-}
+.house>img,.house>video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:fill;pointer-events:none}
+.house>video{opacity:0}
+.house>video.on{opacity:1}
+#vDoor.fade{transition:opacity .14s linear}
+#posterOpen{opacity:0;transition:opacity .45s ease}
+#vPush{position:absolute;left:50%;top:50%;width:1280px;height:720px;margin:-360px 0 0 -640px;transform-origin:50% 50%;
+  opacity:0;pointer-events:none;will-change:transform;object-fit:fill}
+#vPush.on{opacity:1}
 .call{position:absolute;left:0;right:0;bottom:max(26px,env(safe-area-inset-bottom));text-align:center;font-size:13px;letter-spacing:.14em;
   text-transform:uppercase;color:#a47a4e;opacity:0;pointer-events:none}
-#intro.ready .call{animation:callin .9s ease .5s forwards}
+#intro.ready .call{animation:callin .9s ease .3s forwards}
 @keyframes callin{to{opacity:.85}}
 .skip{position:absolute;z-index:6;top:max(12px,env(safe-area-inset-top));right:14px;border:0;background:none;color:#a47a4e;font:600 12px var(--font);
   letter-spacing:.08em;text-transform:uppercase;padding:12px 10px;min-height:44px;opacity:.65;cursor:pointer}
 .skip:hover,.skip:focus-visible{opacity:1;text-decoration:underline}
 #intro.busy .call,#intro.busy .skip{animation:none;transition:opacity .25s;opacity:0}
 #intro.busy .skip{pointer-events:none}
+#room.hold .scene{opacity:0}
+@media (orientation:portrait){#vPush{--ea:1;-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,var(--ea)) 0,#000 5%,#000 95%,rgba(0,0,0,var(--ea)) 100%);mask-image:linear-gradient(to bottom,rgba(0,0,0,var(--ea)) 0,#000 5%,#000 95%,rgba(0,0,0,var(--ea)) 100%)}}
 
 /* ---------- SECTION PANELS ---------- */
 #panels{position:fixed;inset:0;z-index:8;pointer-events:none}
@@ -120,7 +119,7 @@ a,button{touch-action:manipulation}
 .back-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--wood-dark);font-weight:700;text-decoration:none;font-size:15px;
   padding:0 14px 0 6px;margin-left:-6px;border-radius:999px}
 .back-link:hover,.back-link:focus-visible{background:rgba(197,138,78,.16);outline:none}
-.art{width:min(220px,58%);aspect-ratio:var(--ar);margin:18px 0 6px;border-radius:22px;background-image:url(assets/room.webp);background-repeat:no-repeat;
+.art{width:min(220px,58%);aspect-ratio:var(--ar);margin:18px 0 6px;border-radius:22px;background-image:url(assets/room-2560.webp);background-image:image-set(url(assets/room-2560.avif) type('image/avif'),url(assets/room-2560.webp) type('image/webp'));background-repeat:no-repeat;
   background-size:var(--bs);background-position:var(--bp);box-shadow:0 12px 30px rgba(90,50,12,.25),inset 0 0 0 3px rgba(255,236,200,.55)}
 .panel h1{font-size:clamp(30px,8vw,44px);line-height:1.08;margin:18px 0 10px;letter-spacing:-.01em;outline:none}
 .panel p.lead{font-size:clamp(17px,4.6vw,20px);line-height:1.45;margin:0 0 18px;color:#5b3a1c}
@@ -147,12 +146,16 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
 <body>
 
 <!-- ROOM -->
-<main id="room" inert aria-label="Inside the workshop">
+<main id="room" class="hold" inert aria-label="Inside the workshop">
   <span class="brand" aria-hidden="true">NIKITA WORKSHOP</span>
   <div class="scroll" id="scroller">
     <div class="scene" id="scene">
-      <img class="scene-img" id="roomImg" src="assets/room.webp" width="1280" height="720"
-           alt="Inside the Nikita Workshop: a wooden room with a camera on a tripod, a desk with a lamp and a video-editing monitor, a pegboard with a drone controller and headphones, a pencil, a drone on a shelf and a wood stove.">
+      <picture>
+        <source type="image/avif" srcset="assets/room-1280.avif 1280w, assets/room-2560.avif 2560w, assets/room-3840.avif 3840w" sizes="(orientation:portrait) calc(72vh*1.7778), max(100vw,177.7778vh)">
+        <source type="image/webp" srcset="assets/room-1280.webp 1280w, assets/room-2560.webp 2560w, assets/room-3840.webp 3840w" sizes="(orientation:portrait) calc(72vh*1.7778), max(100vw,177.7778vh)">
+        <img class="scene-img" id="roomImg" src="assets/room-1280.webp" width="1280" height="720" decoding="async"
+             alt="Inside the Nikita Workshop: a wooden room with a camera on a tripod, a desk with a lamp and a video-editing monitor, a pegboard with a drone controller and headphones, a pencil, a drone on a shelf and a wood stove.">
+      </picture>
       <!-- cx, cy, w, h are in image units on a 1024x576 grid -->
       <a class="hs" href="#/marketing" data-sec="marketing" style="--cx:207;--cy:228;--w:44;--h:140"><span class="ring"></span><span class="dot"></span><span class="tag">Marketing &amp; social media</span></a>
       <a class="hs" href="#/photo"     data-sec="photo"     style="--cx:215;--cy:416;--w:140;--h:250"><span class="ring"></span><span class="dot"></span><span class="tag">Photo</span></a>
@@ -169,22 +172,16 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
 
 <!-- INTRO -->
 <div id="intro">
+  <div id="wbg"></div>
   <button class="skip" id="skip" type="button">Skip</button>
   <button class="house" id="house" type="button" aria-label="Open the workshop door">
-    <picture class="closed-pic">
-      <source srcset="assets/closed.webp" type="image/webp">
-      <img class="closed" id="closedImg" src="assets/original/closed.png" width="1024" height="1024" alt="Nikita Workshop logo: a small wooden workshop with a closed barn door and a lit window">
-    </picture>
-    <div class="swing" aria-hidden="true">
-      <img class="nodoor" src="assets/house-nodoor.webp" alt="" width="1024" height="1024">
-      <div class="spill" id="spill"></div>
-      <div class="door" id="door">
-        <img class="front" src="assets/door-front.webp" alt="" width="328" height="413">
-        <div class="shade" id="shade"></div>
-        <img class="back" src="assets/door-back.webp" alt="" width="328" height="413">
-      </div>
-    </div>
+    <img id="posterClosed" src="assets/video/poster-closed.webp" width="1024" height="1024" fetchpriority="high" decoding="async"
+         alt="Nikita Workshop logo: a small wooden workshop with a closed barn door, a lit window and smoke drifting from the chimney">
+    <img id="posterOpen" src="assets/video/poster-open.webp" width="1024" height="1024" alt="" decoding="async">
+    <video id="vClosed" muted playsinline webkit-playsinline loop preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
+    <video id="vDoor" muted playsinline webkit-playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
   </button>
+  <video id="vPush" muted playsinline webkit-playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
   <div class="call" aria-hidden="true">Tap the door</div>
 </div>
 
@@ -266,74 +263,131 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
   function centreScroll() { scroller.scrollLeft = matchMedia('(orientation:portrait)').matches ? (scroller.scrollWidth - scroller.clientWidth) / 2 : 0; }
   addEventListener('resize', () => { if (introDone && matchMedia('(orientation:portrait)').matches && !room.classList.contains('interacted')) centreScroll(); });
 
-  /* ---- intro ---- */
-  const house = $('#house'), door = $('#door'), shade = $('#shade');
-  const layerSrcs = ['assets/closed.webp','assets/house-nodoor.webp','assets/door-front.webp','assets/door-back.webp','assets/room.webp'];
-  const preload = Promise.all(layerSrcs.map(src => new Promise(res => {
-    const i = new Image(); i.onload = i.onerror = () => res(); i.src = src;
-  })));
+  /* ---- intro: real animation clips ----
+     closed-loop (smoke drifting) -> door-open -> push-in -> sharp interactive room.
+     Geometry: the 1024px house videos are drawn S px wide; the 1280x720 push-in is drawn with its house (720px tall in the frame)
+     the same S px, then eased up to exactly the room scene's size, so every handoff lines up pixel-for-pixel. */
+  const house = $('#house'), wbg = $('#wbg'), roomImg = $('#roomImg'), sceneEl = $('#scene');
+  const vClosed = $('#vClosed'), vDoor = $('#vDoor'), vPush = $('#vPush'), posterOpen = $('#posterOpen');
+  const ua = navigator.userAgent;
+  const apple = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) || /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(ua);
+  const EXT = (!apple && document.createElement('video').canPlayType('video/webm; codecs="vp9"')) ? 'webm' : 'mp4';
+  const CLIPS = { closed: [vClosed, 'closed-loop'], door: [vDoor, 'door-open'], push: [vPush, 'push-in'] };
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const raf = () => new Promise(r => requestAnimationFrame(r));
   const windowLoaded = new Promise(res => document.readyState === 'complete' ? res() : addEventListener('load', res, { once: true }));
+  let closedPlaying = false, doorStart = null;
+
+  function loadClip(key) {                                  // resolves true when the first frame is decodable, false on error/timeout
+    const [v, name] = CLIPS[key];
+    if (v.__ready) return v.__ready;
+    return v.__ready = new Promise(res => {
+      let ext = EXT, done = false;
+      const fin = ok => { if (!done) { done = true; res(ok); } };
+      v.addEventListener('loadeddata', () => fin(true), { once: true });
+      v.addEventListener('error', () => { if (ext === 'webm') { ext = 'mp4'; v.src = `assets/video/${name}.mp4`; v.load(); } else fin(false); });
+      v.muted = true; v.src = `assets/video/${name}.${ext}`; v.load();
+      setTimeout(() => fin(false), 9000);
+    });
+  }
+  function framePresented(v) {
+    return new Promise(res => {
+      if ('requestVideoFrameCallback' in v) { v.requestVideoFrameCallback(() => res()); setTimeout(res, 500); }
+      else { let n = 0; (function t() { (v.currentTime > .03 || ++n > 15) ? res() : requestAnimationFrame(t); })(); }
+    });
+  }
+  async function playClip(v) {                              // false when play() is refused (autoplay policy)
+    try { await v.play(); } catch (e) { return false; }
+    await framePresented(v); return true;
+  }
+  function nearEnd(v, margin) {
+    return new Promise(res => (function t() { (v.ended || v.duration - v.currentTime <= margin) ? res() : requestAnimationFrame(t); })());
+  }
 
   function finishIntro() {
     if (introDone) return;
     introDone = true; clearTimeout(timer);
+    for (const [v] of Object.values(CLIPS)) { try { v.pause(); v.removeAttribute('src'); v.load(); } catch (e) {} }
     intro.hidden = true; intro.setAttribute('aria-hidden', 'true');
-    room.classList.add('ready');
+    room.classList.remove('hold'); room.classList.add('ready');
     if (!current) room.inert = false;
     centreScroll();
   }
-
-  async function openDoor(skip) {
-    if (opened) return; opened = true; clearTimeout(timer);
-    intro.classList.add('busy');
-    if (skip) { finishIntro(); return; }
-    await preload;
-    centreScroll();
-    const vw = innerWidth, vh = innerHeight;
-    const hb = house.getBoundingClientRect(), S = hb.width, k = S / 1024;
-    const dc = { x: 519 * k, y: 628.5 * k };                      // doorway centre inside the house box
-    const sc = Math.max(vw / (328 * k), vh / (413 * k)) * 1.06;    // scale at which the doorway fills the screen
-    const dx = vw / 2 - (hb.left + dc.x), dy = vh / 2 - (hb.top + dc.y);
-    house.style.transformOrigin = `${dc.x}px ${dc.y}px`;
-
-    if (reduce) {                                                  // simple fade, no swing / zoom
-      room.classList.add('ready');
-      await intro.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, easing: 'ease', fill: 'forwards' }).finished;
-      finishIntro(); return;
-    }
-
-    house.classList.add('opening');
-    // 1) swing the door (front face -> back face) around its left hinge
-    const swing = door.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(-118deg)' }],
-      { duration: 950, easing: 'cubic-bezier(.32,.05,.25,1)', fill: 'forwards' });
-    $('#spill').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 950, easing: 'ease-out', fill: 'forwards' });
-    shade.animate([{ opacity: 0 }, { opacity: .35, offset: .5 }, { opacity: 0 }], { duration: 950, fill: 'forwards' });
-    await swing.finished;
-    await new Promise(r => setTimeout(r, 300));               // a beat with the door open
-
-    // 2) camera push through the doorway; the room is already underneath and the intro fades out over the last part
-    const D = 1300;
-    // the last part is a "rack focus": the zoomed doorway softens and dissolves into the sharp room
-    house.animate([{ transform: 'translate(0,0) scale(1)', filter: 'blur(0px)' },
-                   { transform: `translate(${dx * .72}px,${dy * .72}px) scale(${sc * .55})`, filter: 'blur(0px)', offset: .6 },
-                   { transform: `translate(${dx}px,${dy}px) scale(${sc})`, filter: 'blur(10px)' }],
-      { duration: D, easing: 'cubic-bezier(.55,0,.3,1)', fill: 'forwards' });
-    $('#scene').animate([{ scale: '1.12', filter: 'blur(10px)' }, { scale: '1.07', filter: 'blur(10px)', offset: .55 }, { scale: '1', filter: 'blur(0px)' }],
-      { duration: D, easing: 'cubic-bezier(.25,.6,.25,1)' });
-    const fade = intro.animate([{ opacity: 1 }, { opacity: 1, offset: .6 }, { opacity: 0 }], { duration: D, easing: 'ease-in-out', fill: 'forwards' });
-    await fade.finished;
+  async function fadeOut(ms) {                              // intro dissolves to the room; also the fallback path
+    centreScroll(); room.classList.remove('hold');
+    await intro.animate([{ opacity: 1 }, { opacity: 0 }], { duration: ms, easing: 'ease', fill: 'forwards' }).finished;
     finishIntro();
   }
+  async function bail() {                                   // video unavailable / refused: still-image fade
+    for (const [v] of Object.values(CLIPS)) { try { v.pause(); } catch (e) {} v.classList.remove('on'); }
+    posterOpen.style.opacity = 1; await sleep(650); await fadeOut(500);
+  }
 
-  house.addEventListener('click', () => openDoor(false));
-  $('#skip').addEventListener('click', () => openDoor(true));
+  async function runVideo() {
+    const [okD, okP] = await Promise.all([loadClip('door'), loadClip('push')]);
+    if (!okD || !okP) throw new Error('clips unavailable');
+    // 1) closed loop -> door-open. Seamless at the loop boundary; otherwise a <150ms dissolve (only the smoke differs)
+    if (doorStart) { if (!(await doorStart)) throw new Error('door refused'); await framePresented(vDoor); vDoor.classList.add('on'); }
+    else {
+      if (closedPlaying && vClosed.duration - vClosed.currentTime <= .4)
+        await new Promise(res => (function t() { (vClosed.duration - vClosed.currentTime <= .045 || vClosed.currentTime < .1) ? res() : requestAnimationFrame(t); })());
+      if (closedPlaying) vDoor.classList.add('fade');
+      if (!(await playClip(vDoor))) throw new Error('door refused');
+      vDoor.classList.add('on');
+      if (closedPlaying) { await sleep(170); vClosed.pause(); vClosed.classList.remove('on'); }
+    }
+    // 2) push-in through the doorway, scaled so its house matches the door-open house and its last frame matches the room scene
+    centreScroll();
+    const S = house.getBoundingClientRect().width, k0 = S / 720, k1 = sceneEl.getBoundingClientRect().width / 1280;
+    const setScale = p => {
+      const e = p * p * (3 - 2 * p);
+      vPush.style.transform = `scale(${k0 + (k1 - k0) * e})`;
+      const w = Math.min(1, Math.max(0, (p - .70) / .23)); const f = w * w * (3 - 2 * w); wbg.style.opacity = 1 - f; vPush.style.setProperty('--ea', 1 - f);
+    };
+    setScale(0);
+    await nearEnd(vDoor, .04);
+    if (!(await playClip(vPush))) throw new Error('push refused');
+    vPush.classList.add('on'); vDoor.classList.remove('on'); vDoor.classList.remove('fade');
+    await new Promise(res => (function t() {
+      const p = Math.min(1, vPush.currentTime / (vPush.duration || 3)); setScale(p);
+      (vPush.ended || p >= .998) ? res() : requestAnimationFrame(t);
+    })());
+    setScale(1);
+    // 3) hand off: the sharp room appears under the last push-in frame, then the clip dissolves away
+    try { await roomImg.decode(); } catch (e) {}
+    await fadeOut(300);
+  }
 
-  // auto-open ~2s after everything has loaded, or sooner on a tap/click
-  Promise.all([windowLoaded, preload]).then(() => {
+  async function openDoor(kind) {
+    if (opened) return; opened = true; clearTimeout(timer);
+    intro.classList.add('busy');
+    if (kind === 'skip') { await fadeOut(250); return; }
+    if (reduce) { await fadeOut(450); return; }
+    if (kind === 'tap' && !closedPlaying) {                 // autoplay was refused: unlock the clips inside this tap
+      vDoor.muted = vPush.muted = true;
+      doorStart = vDoor.play().then(() => true, () => false);
+      vPush.play().then(() => { vPush.pause(); vPush.currentTime = 0; }, () => {});
+    }
+    try { await runVideo(); } catch (e) { console.info('intro fallback:', e.message); if (!introDone) await bail(); }
+  }
+
+  house.addEventListener('click', () => openDoor('tap'));
+  $('#skip').addEventListener('click', () => openDoor('skip'));
+
+  // idle: closed-door loop with drifting smoke; auto-open ~1.9s after it starts (or on tap, whichever first)
+  (async () => {
+    if (!reduce && !introDone) {
+      if (await loadClip('closed')) {
+        closedPlaying = await playClip(vClosed);
+        if (closedPlaying) vClosed.classList.add('on');
+      }
+      loadClip('door').then(() => loadClip('push'));        // warm the next clips while the loop idles
+    }
+    await windowLoaded;
     if (introDone || opened) return;
     intro.classList.add('ready');
-    timer = setTimeout(() => openDoor(false), 2000);
-  });
+    timer = setTimeout(() => openDoor('auto'), 1900);
+  })();
 
   route();   // a deep link such as #/photo skips the intro
 })();
