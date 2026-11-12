@@ -64,11 +64,21 @@ a,button{touch-action:manipulation}
   background:var(--cream);color:var(--ink);font-size:14px;font-weight:700;padding:7px 12px;border-radius:999px;
   box-shadow:0 6px 18px rgba(60,30,6,.35);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:2}
 .hs.tag-below .tag{bottom:auto;top:calc(100% + 8px)}
-/* Hover styling only for real hover devices: touch gets a direct, single-tap open (no hover-preview step). Tags only — no glow highlight. */
+/* Hover styling only for real hover devices: touch gets a direct, single-tap open (no hover-preview step) */
 @media (hover:hover) and (pointer:fine){
+  .hs:hover .ring{background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
   .hs:hover .tag{opacity:1;transform:translate(-50%,0)}
+  .scene:has(.hs[data-sec="photo"]:hover)  .hs[data-sec="photo"]  .ring,
+  .scene:has(.hs[data-sec="drone"]:hover)  .hs[data-sec="drone"]  .ring,
+  .scene:has(.hs[data-sec="social"]:hover) .hs[data-sec="social"] .ring
+    {background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
 }
+.hs:focus-visible .ring{background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
 .hs:focus-visible .tag{opacity:1;transform:translate(-50%,0)}
+.scene:has(.hs[data-sec="photo"]:focus-visible)  .hs[data-sec="photo"]  .ring,
+.scene:has(.hs[data-sec="drone"]:focus-visible)  .hs[data-sec="drone"]  .ring,
+.scene:has(.hs[data-sec="social"]:focus-visible) .hs[data-sec="social"] .ring
+  {background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
 
 /* Portrait phones: the wide room is a horizontally swipeable strip, centred, with the wall colours filling above/below */
 @media (orientation:portrait){
