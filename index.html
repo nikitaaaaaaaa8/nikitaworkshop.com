@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nikita Workshop</title>
-<meta name="description" content="Nikita Workshop LLC — photo, video editing, drone, DJ and event video, computer help, AI, marketing and social media.">
+<meta name="description" content="Nikita Workshop LLC — photo and video, drone, DJ and event video, and Social Media.">
 <meta name="theme-color" content="#ffffff">
 <meta property="og:title" content="Nikita Workshop">
-<meta property="og:description" content="Photo, video, drone, computer help, AI, marketing and social media.">
+<meta property="og:description" content="Photo and video, drone, DJ and event video, and Social Media.">
 <meta property="og:image" content="https://nikitaaaaaaaa8.github.io/nikitaworkshop.com/assets/og-1200x630.jpg">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preload" as="image" href="assets/video/poster-closed.webp" type="image/webp">
@@ -37,6 +37,7 @@ a,button{touch-action:manipulation}
 .scene-img{width:100%;height:100%;object-fit:fill}
 /* stove-fire loop: a small 3x-upscaled crop (x832-1264, y448-720 of the 1280x720 room) placed by %, feathered into the still */
 .fire{position:absolute;left:65%;top:62.2222%;width:33.75%;height:37.7778%;object-fit:fill;pointer-events:none;opacity:0;
+  transition:opacity .9s ease;
   -webkit-mask-image:linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 14%,#000 100%);
   -webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 14%,#000 100%);mask-composite:intersect}
 .fire.on{opacity:1}
@@ -67,9 +68,17 @@ a,button{touch-action:manipulation}
 @media (hover:hover) and (pointer:fine){
   .hs:hover .ring{background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
   .hs:hover .tag{opacity:1;transform:translate(-50%,0)}
+  .scene:has(.hs[data-sec="photo"]:hover)  .hs[data-sec="photo"]  .ring,
+  .scene:has(.hs[data-sec="drone"]:hover)  .hs[data-sec="drone"]  .ring,
+  .scene:has(.hs[data-sec="social"]:hover) .hs[data-sec="social"] .ring
+    {background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
 }
 .hs:focus-visible .ring{background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
 .hs:focus-visible .tag{opacity:1;transform:translate(-50%,0)}
+.scene:has(.hs[data-sec="photo"]:focus-visible)  .hs[data-sec="photo"]  .ring,
+.scene:has(.hs[data-sec="drone"]:focus-visible)  .hs[data-sec="drone"]  .ring,
+.scene:has(.hs[data-sec="social"]:focus-visible) .hs[data-sec="social"] .ring
+  {background:var(--glow-soft);border-color:rgba(255,214,140,.95);box-shadow:0 0 22px 6px rgba(255,190,80,.55),inset 0 0 18px rgba(255,220,150,.45)}
 @media (hover:none){
   #room.ready .hs .dot{opacity:.95;animation:pulse 2.2s ease-out infinite}
   #room.interacted .hs .dot{opacity:0;animation:none}
@@ -144,6 +153,7 @@ a,button{touch-action:manipulation}
   .panel{transition:opacity .2s;transform:none}
   .hs .dot{animation:none!important}
   .hs .tag,.hs .ring{transition:none}
+  .fire{transition:none}
 }
 noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;place-items:center;text-align:center;padding:24px;font-family:var(--font)}
 </style>
@@ -163,13 +173,13 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
       </picture>
       <!-- cx, cy, w, h are in image units on a 1024x576 grid -->
       <video class="fire" id="vFire" muted playsinline webkit-playsinline loop preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
-      <a class="hs" href="#/marketing" data-sec="marketing" style="--cx:207;--cy:228;--w:44;--h:140"><span class="ring"></span><span class="dot"></span><span class="tag">Marketing &amp; social media</span></a>
-      <a class="hs" href="#/photo"     data-sec="photo"     style="--cx:215;--cy:416;--w:140;--h:250"><span class="ring"></span><span class="dot"></span><span class="tag">Photo</span></a>
-      <a class="hs" href="#/computer"  data-sec="computer"  style="--cx:298;--cy:227;--w:90;--h:90"><span class="ring"></span><span class="dot"></span><span class="tag">Computer help</span></a>
-      <a class="hs" href="#/dj"        data-sec="dj"        style="--cx:387;--cy:236;--w:76;--h:112"><span class="ring"></span><span class="dot"></span><span class="tag">DJ &amp; event videos</span></a>
-      <a class="hs" href="#/ai"        data-sec="ai"        style="--cx:376;--cy:342;--w:92;--h:112"><span class="ring"></span><span class="dot"></span><span class="tag">AI help</span></a>
-      <a class="hs" href="#/video"     data-sec="video"     style="--cx:501;--cy:337;--w:152;--h:134"><span class="ring"></span><span class="dot"></span><span class="tag">Video editing</span></a>
-      <a class="hs" href="#/drone"     data-sec="drone"     style="--cx:722;--cy:331;--w:208;--h:68"><span class="ring"></span><span class="dot"></span><span class="tag">Drone</span></a>
+      <a class="hs" href="#/social" data-sec="social" style="--cx:207;--cy:228;--w:44;--h:140"><span class="ring"></span><span class="dot"></span><span class="tag">Social Media</span></a>
+      <a class="hs" href="#/photo"  data-sec="photo"  style="--cx:215;--cy:416;--w:140;--h:250"><span class="ring"></span><span class="dot"></span><span class="tag">Photo and Video</span></a>
+      <a class="hs" href="#/drone"  data-sec="drone"  style="--cx:298;--cy:227;--w:90;--h:90"><span class="ring"></span><span class="dot"></span><span class="tag">Drone Stuff</span></a>
+      <a class="hs" href="#/dj"     data-sec="dj"     style="--cx:387;--cy:236;--w:76;--h:112"><span class="ring"></span><span class="dot"></span><span class="tag">DJ &amp; event videos</span></a>
+      <a class="hs" href="#/social" data-sec="social" style="--cx:376;--cy:342;--w:92;--h:112"><span class="ring"></span><span class="dot"></span><span class="tag">Social Media</span></a>
+      <a class="hs" href="#/photo"  data-sec="photo"  style="--cx:501;--cy:337;--w:152;--h:134"><span class="ring"></span><span class="dot"></span><span class="tag">Photo and Video</span></a>
+      <a class="hs" href="#/drone"  data-sec="drone"  style="--cx:722;--cy:331;--w:208;--h:68"><span class="ring"></span><span class="dot"></span><span class="tag">Drone Stuff</span></a>
       <a class="hs tag-below" href="#/contact" data-sec="contact" style="--cx:852;--cy:462;--w:174;--h:158"><span class="ring"></span><span class="dot"></span><span class="tag">Contact</span></a>
     </div>
   </div>
@@ -205,16 +215,14 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
   /* ---- section content (placeholder copy; Nikita can edit freely) ---- */
   // art = crop box of the room image in 1024x576 units: [x, y, w, h]
   const SECTIONS = {
-    photo:     { title: 'Photo',                    line: 'Photography for people, places and events.',      art: [148, 288, 136, 256] },
-    video:     { title: 'Video editing',            line: 'Footage in, finished video out.',                 art: [424, 268, 156, 138] },
-    drone:     { title: 'Drone',                    line: 'Aerial photo and video.',                         art: [616, 296, 214, 72] },
-    dj:        { title: 'DJ & event videos',        line: 'Music and moments, captured on video.',           art: [346, 176, 82, 120] },
-    computer:  { title: 'Computer help',            line: 'Friendly help with the computer stuff.',          art: [252, 178, 96, 96] },
-    ai:        { title: 'AI help',                  line: 'Putting AI to work on real, everyday tasks.',     art: [326, 288, 92, 118] },
-    marketing: { title: 'Marketing & social media', line: 'Social media and marketing that fits your business.', art: [186, 156, 56, 150] },
-    contact:   { title: 'Contact',                  line: 'Say hello.',                                      art: [764, 386, 178, 158], contact: true },
+    photo:   { title: 'Photo and Video', line: 'Photography and video editing.',                         art: [145, 268, 432, 274] },
+    drone:   { title: 'Drone Stuff',     line: 'Aerial photo and video.',                               art: [616, 296, 214, 72] },
+    dj:      { title: 'DJ & event videos', line: 'Music and moments, captured on video.',               art: [346, 176, 82, 120] },
+    social:  { title: 'Social Media',    line: 'Social media and marketing that fits your business.',   art: [186, 156, 236, 242] },
+    contact: { title: 'Contact',         line: 'Say hello.',                                            art: [764, 386, 178, 158], contact: true },
   };
-  const ORDER = ['photo','video','drone','dj','computer','ai','marketing','contact'];
+  const ORDER = ['photo','drone','dj','social','contact'];
+  const ALIAS = { video: 'photo', marketing: 'social', computer: 'drone', ai: 'social' };
   const esc = s => s.replace(/&/g, '&amp;');
 
   const panels = $('#panels');
@@ -243,7 +251,8 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
 
   /* ---- router: #/photo opens a section, anything else = room ---- */
   function route() {
-    const id = (location.hash.match(/^#\/([a-z]+)$/) || [])[1];
+    const raw = (location.hash.match(/^#\/([a-z]+)$/) || [])[1];
+    const id = ALIAS[raw] || raw;
     const next = SECTIONS[id] ? id : null;
     if (next && !introDone) finishIntro();
     if (next === current) return;
@@ -286,7 +295,8 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
   const raf = () => new Promise(r => requestAnimationFrame(r));
   const windowLoaded = new Promise(res => document.readyState === 'complete' ? res() : addEventListener('load', res, { once: true }));
   let closedPlaying = false, doorStart = null;
-  const RATE = 1.1;                                          // door-open and push-in play 10% faster (trims ~0.5s, not noticeable)
+  const RATE = 1.1;                                          // door-open plays 10% faster
+  const PUSH = 1.0;                                          // push-in at natural speed, then eases to a stop
 
   function loadClip(key) {                                  // resolves true when the first frame is decodable, false on error/timeout
     const [v, name] = key === 'fire' ? FIRE : CLIPS[key];
@@ -331,7 +341,7 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
   async function fadeOut(ms) {                              // intro dissolves to the room; also the fallback path
     startFire();
     centreScroll(); room.classList.remove('hold');
-    await intro.animate([{ opacity: 1 }, { opacity: 0 }], { duration: ms, easing: 'ease', fill: 'forwards' }).finished;
+    await intro.animate([{ opacity: 1 }, { opacity: 0 }], { duration: ms, easing: 'cubic-bezier(0.22, 0.08, 0.25, 1)', fill: 'forwards' }).finished;
     finishIntro();
   }
   async function bail() {                                   // video unavailable / refused: still-image fade
@@ -363,18 +373,23 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
     };
     setScale(0);
     await nearEnd(vDoor, .04 * RATE);
-    vPush.playbackRate = RATE;
+    vPush.playbackRate = PUSH;
     if (!(await playClip(vPush))) throw new Error('push refused');
     vPush.classList.add('on'); vDoor.classList.remove('on'); vDoor.classList.remove('fade');
     await new Promise(res => (function t() {
-      const p = Math.min(1, vPush.currentTime / (vPush.duration || 3)); setScale(p);
+      const p = Math.min(1, vPush.currentTime / (vPush.duration || 3));
+      setScale(p);
+      if (p > .72) {                                         // ease the camera to a stop, and start the fire fading in
+        const u = (p - .72) / .28, f = u * u * (3 - 2 * u);
+        vPush.playbackRate = PUSH - .5 * f;
+        startFire();
+      }
       (vPush.ended || p >= .998) ? res() : requestAnimationFrame(t);
     })());
     setScale(1);
-    // 3) hand off: the sharp room appears under the last push-in frame (flames start moving now), then the clip dissolves away
-    startFire();
+    // 3) hand off: last frame already matches the room; dissolve slowly so sharpness eases in instead of snapping
     try { await roomImg.decode(); } catch (e) {}
-    await fadeOut(280);
+    await fadeOut(720);
   }
 
   async function openDoor(kind) {
@@ -384,7 +399,7 @@ noscript .ns{position:fixed;inset:0;z-index:20;background:#fff;display:grid;plac
     if (reduce) { await fadeOut(450); return; }
     if (kind === 'tap' && !closedPlaying) {                 // autoplay was refused: unlock the clips inside this tap
       vDoor.muted = vPush.muted = true;
-      vDoor.playbackRate = vPush.playbackRate = RATE;
+      vDoor.playbackRate = RATE; vPush.playbackRate = PUSH;
       doorStart = vDoor.play().then(() => true, () => false);
       vPush.play().then(() => { vPush.pause(); vPush.currentTime = 0; }, () => {});
     }
